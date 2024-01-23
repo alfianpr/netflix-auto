@@ -1,0 +1,11 @@
+{
+    "email_login" : "(//input[@id='id_userLoginId'])[1]",
+    "password_login" : "(//input[@id='id_password'])[1]",
+    "tp_button_on" : "(//button[@aria-label='OFF'])[1]",
+    "tp_button_done" : "(//button[normalize-space()='Done'])[1]",
+    "owner_profile_name" : "//*[@id='id_ownerName']",
+    "profile1_name" : "//*[@id='id_profile1Name']",
+    "profile2_name" : "//*[@id='id_profile2Name']",
+    "profile3_name" : "//*[@id='id_profile3Name']",
+    "profile4_name" : "//*[@id='id_profile4Name']"
+}

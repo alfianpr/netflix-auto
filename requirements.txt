@@ -1,0 +1,4 @@
+pandas==2.1.1
+selenium==4.12.0
+webdriver-manager==4.0.0
+-e ./netlib
