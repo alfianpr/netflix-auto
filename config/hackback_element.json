@@ -1,11 +1,23 @@
 {
     "email_login" : "(//input[@id='id_userLoginId'])[1]",
     "password_login" : "(//input[@id='id_password'])[1]",
-    "tp_button_on" : "(//button[@aria-label='OFF'])[1]",
-    "tp_button_done" : "(//button[normalize-space()='Done'])[1]",
+    "tp_button_off_en" : "(//button[@aria-label='ON'])[1]",
+    "tp_button_off_id" : "//button[@aria-label='HIDUP'][1]",
+    "tp_button_done_en" : "(//button[normalize-space()='Done'])[1]",
+    "tp_button_done_id" : "(//button[normalize-space()='Selesai'])[1]",
     "owner_profile_name" : "//*[@id='id_ownerName']",
     "profile1_name" : "//*[@id='id_profile1Name']",
     "profile2_name" : "//*[@id='id_profile2Name']",
     "profile3_name" : "//*[@id='id_profile3Name']",
-    "profile4_name" : "//*[@id='id_profile4Name']"
+    "profile4_name" : "//*[@id='id_profile4Name']",
+    "form_parental_control" : "(//input[@id='input-account-content-restrictions'])[1]",
+    "checkbox_parental_control_en" : "(//label[contains(text(),'Require a PIN to access 1’s profile.')])[1]",
+    "checkbox_parental_control_id" : "(//label[normalize-space()='Minta PIN untuk mengakses profil 1.'])[1]",
+    "applybutton_parental_control_en" : "(//button[@type='button'][normalize-space()='Apply'])[1]",
+    "applybutton_parental_control_id" : "(//button[normalize-space()='Terapkan'])[1]",
+    "hide_all_history_button_en" : "(//a[normalize-space()='Hide all'])[1]",
+    "hide_all_history_button_id" : "(//a[normalize-space()='Sembunyikan semua'])[1]",
+    "cp_current_password" : "(//input[@id='id_currentPassword'])[1]",
+    "cp_new_password" : "(//input[@id='id_newPassword'])[1]",
+    "cp_confirm_new_password" : "(//input[@id='id_confirmNewPassword'])[1]"
 }
