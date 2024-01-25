@@ -1,8 +1,8 @@
 {
     "email_login" : "(//input[@id='id_userLoginId'])[1]",
     "password_login" : "(//input[@id='id_password'])[1]",
-    "tp_button_off_en" : "(//button[@aria-label='ON'])[1]",
-    "tp_button_off_id" : "//button[@aria-label='HIDUP'][1]",
+    "tp_button_off_en" : "(//button[@aria-label='OFF'])[1]",
+    "tp_button_off_id" : "//button[@aria-label='MATI'][1]",
     "tp_button_done_en" : "(//button[normalize-space()='Done'])[1]",
     "tp_button_done_id" : "(//button[normalize-space()='Selesai'])[1]",
     "owner_profile_name" : "//*[@id='id_ownerName']",
