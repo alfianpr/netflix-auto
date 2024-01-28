@@ -101,3 +101,6 @@ def enter_key():
 
 def close_driver():
     driver.close()
+
+def screenshot(name):
+    driver.get_screenshot_as_file(f"screenshots/{name}.png")

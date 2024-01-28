@@ -7,7 +7,8 @@ from netlib.utils import (
     click,
     clear_field,
     close_driver,
-    get_text
+    get_text,
+    screenshot
 )
 import json
 import argparse
@@ -44,9 +45,10 @@ def tp_off(email_id):
     try:
         log.info(f"Turn on the TP for {email_id}")
         try:
-            click(PAGE_ELEMENT["tp_button_on_en"])
+            time.sleep(1)
+            click(PAGE_ELEMENT["tp_button_off_en"])
         except:
-            click(PAGE_ELEMENT["tp_button_on_id"])
+            click(PAGE_ELEMENT["tp_button_off_id"])
     except:
         log.info(f"TP button OFF for {email_id} already")
     try:
@@ -109,19 +111,18 @@ def clean_history(email_id):
     log.info("Hide the history")
     open_link(PAGE_URL["url_ch"])
     time.sleep(3)
+    # try:
     try:
-        try:
-            click(PAGE_ELEMENT["hide_all_history_button_en"])
-        except:
-            click(PAGE_ELEMENT["hide_all_history_button_id"])
-        log.info(f"Hidden the history for {email_id}")
-        time.sleep(2)
-        try:
-            click(PAGE_ELEMENT["confirm_hide_history_button_en"])
-        except:
-            click(PAGE_ELEMENT["confirm_hide_history_button_id"])
+        click(PAGE_ELEMENT["hide_all_history_button_en"])
     except:
-        log.info(f"{email_id} already hidden")
+        click(PAGE_ELEMENT["hide_all_history_button_id"])
+    log.info(f"Hidden the history for {email_id}")
+    time.sleep(2)
+    try:
+        click(PAGE_ELEMENT["confirm_delete_history_en"])
+    except:
+        click(PAGE_ELEMENT["confirm_delete_history_id"])
+    time.sleep(1)
 
 # Change the password
 def change_password(email_id, password):
@@ -171,6 +172,11 @@ def clean_cookies(email_id):
 #     print(payment_method, due_date)
 #     return payment_method, due_date
 
+def screenshot_account_information(email_id):
+    log.info(f"Get the account information for {email_id}")
+    open_link(PAGE_URL["url_ya"])
+    time.sleep(3)
+    screenshot(name=f"hackback_{args.n}_{email_id}")
 
 # Flow of the scripts (Alur Jalannya Script)
 # payment_method_list = []
@@ -199,6 +205,10 @@ def flow():
             log.error(f"FAILED turn off the TP : {email_id}")
             status = "FAILED"
             state = "failed turn off the tp"
+        try:
+            screenshot_account_information(email_id)
+        except:
+            log.error(f"FAILED screenshot the account information : {email_id}")
         try:
             time.sleep(3)
             delete_profile(email_id) # Delete the profile
@@ -234,14 +244,6 @@ def flow():
             log.error(f"FAILED CLEAN COOKIES : {email_id}")
             status = "FAILED"
             state = "failed clean cookies"
-
-        # Create information log, save to the results file
-        try:
-            payment_method, due_date = get_account_information(email_id)
-        except:
-            log.error(f"FAILED GET ACCOUNT INFORMATION : {email_id}")
-            status = "FAILED"
-            state = "failed get account information"
         try:
             status_list.append(status)
         except:
