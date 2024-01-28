@@ -4,6 +4,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver import ActionChains
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
 import logging
 
 import logging
@@ -97,3 +98,6 @@ def enter_key():
     action.send_keys(
         Keys.ENTER
     ).perform()
+
+def close_driver():
+    driver.close()

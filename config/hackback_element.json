@@ -1,6 +1,6 @@
 {
-    "email_login" : "(//input[@id='id_userLoginId'])[1]",
-    "password_login" : "(//input[@id='id_password'])[1]",
+    "email_login" : "/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[1]/form[1]/div[1]/div[1]/input[1]",
+    "password_login" : "/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[1]/form[1]/div[2]/div[1]/div[1]/input[1]",
     "tp_button_off_en" : "(//button[@aria-label='OFF'])[1]",
     "tp_button_off_id" : "//button[@aria-label='MATI'][1]",
     "tp_button_done_en" : "(//button[normalize-space()='Done'])[1]",
@@ -19,5 +19,7 @@
     "hide_all_history_button_id" : "(//a[normalize-space()='Sembunyikan semua'])[1]",
     "cp_current_password" : "(//input[@id='id_currentPassword'])[1]",
     "cp_new_password" : "(//input[@id='id_newPassword'])[1]",
-    "cp_confirm_new_password" : "(//input[@id='id_confirmNewPassword'])[1]"
+    "cp_confirm_new_password" : "(//input[@id='id_confirmNewPassword'])[1]",
+    "ya_payment_method" : ".mopType",
+    "ya_payment_due_date" : "//*[@id='appMountPoint']/div/div/div/div[2]/div/div/div[4]/div[1]/section/div[2]/div/div/div[1]/div[2]"
 }
