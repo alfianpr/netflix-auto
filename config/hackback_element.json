@@ -20,6 +20,10 @@
     "cp_current_password" : "(//input[@id='id_currentPassword'])[1]",
     "cp_new_password" : "(//input[@id='id_newPassword'])[1]",
     "cp_confirm_new_password" : "(//input[@id='id_confirmNewPassword'])[1]",
-    "ya_payment_method" : ".mopType",
-    "ya_payment_due_date" : "//*[@id='appMountPoint']/div/div/div/div[2]/div/div/div[4]/div[1]/section/div[2]/div/div/div[1]/div[2]"
+    "ya_next_bill_date_1" : "//*[@id='appMountPoint']/div/div/div/div[3]/div/div/div[5]/div[1]/section/div[2]/div/div/div[1]/div[1]",
+    "ya_next_bill_date_2" : "//*[@id='appMountPoint']/div/div/div/div[3]/div/div/div[5]/div[1]/section/div[2]/div/div/div[1]/div[2]",
+    "test" : "/html/body/div[1]/div/div/div/div[2]/div/div/div[4]/div[1]/section/div[2]/div/div/div[1]/div[2]",
+    "ya_balik_dasar" : "//*[@id='appMountPoint']/div/div/div/div[3]/div/div/div[5]/div[1]/section/div[2]/div/div/div[1]/div[2]",
+    "confirm_delete_history_id" : "(//button[normalize-space()='Ya, sembunyikan semua aktivitas streaming saya'])[1]",
+    "confirm_delete_history_en" : "(//button[normalize-space()='Yes, hide all my viewing activity'])[1]"
 }
