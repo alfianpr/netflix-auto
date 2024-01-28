@@ -128,6 +128,7 @@ def clean_history(email_id):
 def change_password(email_id, password):
     new_password = NEW_PASS_LISTS[password]
     log.info(f"Change the password for {email_id}")
+    log.info(f"New password : {new_password}")
     open_link(PAGE_URL["url_cp"])
     time.sleep(10)
     filling(
@@ -173,10 +174,10 @@ def clean_cookies(email_id):
 #     return payment_method, due_date
 
 def screenshot_account_information(email_id):
-    log.info(f"Get the account information for {email_id}")
+    log.info(f"Screenshot the account information for {email_id}")
     open_link(PAGE_URL["url_ya"])
     time.sleep(3)
-    screenshot(name=f"hackback_{args.n}_{email_id}")
+    screenshot(name=f"hackback_{args.n}_{email_id}_{datetime.now()}")
 
 # Flow of the scripts (Alur Jalannya Script)
 # payment_method_list = []
@@ -189,7 +190,22 @@ def flow():
         email_id = i["email"]
         password = i["pass"]
 
-        # Setup the driver (Opening the browser)
+        # Setup the result file
+        try:
+            df_result = pd.DataFrame(
+                {
+                    "email" : account_list,
+                    "status" : status_list,
+                    "state" : state_list
+                }
+            )
+
+            df_result.to_csv(
+                f"results/hackback_{args.n}.csv"
+            )
+        except:
+            pass
+        account_list.append(email_id)
         driver_start()
         try:
             log.info(f"Start hackback for {email_id}")
@@ -198,17 +214,28 @@ def flow():
             log.error(f"FAILED LOGIN : {email_id}")
             status = "FAILED"
             state = "failed login"
+            status_list.append(status)
+            state_list.append(state)
+            continue
         try:
             time.sleep(3)
             tp_off(email_id) # Turn off the TP
         except:
-            log.error(f"FAILED turn off the TP : {email_id}")
+            log.error(f"FAILED to login : {email_id}")
             status = "FAILED"
-            state = "failed turn off the tp"
+            state = "failed to login"
+            status_list.append(status)
+            state_list.append(state)
+            continue
         try:
             screenshot_account_information(email_id)
         except:
             log.error(f"FAILED screenshot the account information : {email_id}")
+            status = "FAILED"
+            state = "failed screenshot account information"
+            status_list.append(status)
+            state_list.append(state)
+            continue
         try:
             time.sleep(3)
             delete_profile(email_id) # Delete the profile
@@ -216,6 +243,9 @@ def flow():
             log.error(f"FAILED DELETE : {email_id}")
             status = "FAILED"
             state = "failed delete profile"
+            status_list.append(status)
+            state_list.append(state)
+            continue
         try:
             time.sleep(3)
             remove_pin(email_id, password) # Remove the pin
@@ -223,13 +253,19 @@ def flow():
             log.error(f"FAILED PIN : {email_id}")
             status = "FAILED"
             state = "failed remove pin"
+            status_list.append(status)
+            state_list.append(state)
+            continue
         try:
             time.sleep(3)
             clean_history(email_id) # Clean the history
         except:
-            log.error(f"FAILED HISTORY : {email_id}")
-            status = "FAILED"
-            state = "failed clean history"
+            log.error(f"Has Empty history : {email_id}")
+            status = "Has Empty history"
+            state = "Has Empty history"
+            status_list.append(status)
+            state_list.append(state)
+            pass
         try:
             time.sleep(3)
             change_password(email_id, password) # Change the password
@@ -237,15 +273,24 @@ def flow():
             log.error(f"FAILED PASSWORD : {email_id}")
             status = "FAILED"
             state = "failed change password"
+            status_list.append(status)
+            state_list.append(state)
+            continue
         try:
-            time.sleep(4)
+            time.sleep(3)
             clean_cookies(email_id) # Clean the cookies
         except:
             log.error(f"FAILED CLEAN COOKIES : {email_id}")
             status = "FAILED"
             state = "failed clean cookies"
+            status_list.append(status)
+            state_list.append(state)
+            continue
+        
+        account_list.append(email_id)
         try:
             status_list.append(status)
+            state_list.append(state)
         except:
             status_list.append("SUCCESS")
         try:
@@ -260,18 +305,6 @@ def flow():
         #     due_date_list.append(due_date)
         # except:
         #     due_date_list.append("Failed")
-
-        df_result = pd.DataFrame(
-            {
-                "email" : account_list,
-                "status" : status_list,
-                "state" : state_list
-            }
-        )
-
-        df_result.to_csv(
-            f"results/hackback_{args.n}.csv"
-        )
 
         close_driver() # Close the driver
 
