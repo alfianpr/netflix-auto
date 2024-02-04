@@ -1,13 +1,13 @@
 from netlib.utils import (
     open_link,
     driver_start,
-    log,
     filling,
     enter_key,
     click,
     clear_field,
     close_driver,
     get_text,
+    setup_logger,
     screenshot
 )
 import json
@@ -15,12 +15,38 @@ import argparse
 import pandas as pd
 import time
 from datetime import datetime
+import logging
+from pathlib import Path
+
+log_level = logging.DEBUG
 
 # Setup the input
 parser = argparse.ArgumentParser(description="Input the number of hackback credentials")
 parser.add_argument("-n", help="input the number")
 args = parser.parse_args()
 CREDENTIAL = f"hackback_login_{args.n}"
+
+# Print to the terminal
+logging.root.setLevel(log_level)
+formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(message)s", "%Y-%m-%d %H:%M:%S")
+stream = logging.StreamHandler()
+stream.setLevel(log_level)
+stream.setFormatter(formatter)
+log = logging.getLogger("pythonConfig")
+if not log.hasHandlers():
+    log.setLevel(log_level)
+    log.addHandler(stream)
+
+# file handler:
+file_handler = logging.FileHandler(Path(f"hackback_{args.n}.log"), mode="a")
+file_handler.setLevel(log_level)
+file_handler.setFormatter(formatter)
+log.addHandler(file_handler)
+
+
+# resume
+setup_logger('logger', f"./results/hackback_{args.n}.log")
+resume = logging.getLogger('logger')
 
 # Load the requirements files
 PAGE_URL = json.load(open("config/hackback_url.json"))
@@ -35,9 +61,9 @@ def login(email_id, password):
     log.info(f"Login to netflix {PAGE_URL['url_tp']}")
     time.sleep(3)
     filling(PAGE_ELEMENT["email_login"], email_id)
-    log.info(f"Input email {email_id}")
+    # log.info(f"Input email {email_id}")
     filling(PAGE_ELEMENT["password_login"], password)
-    log.info(f"Input password {password}")
+    # log.info(f"Input password {password}")
     enter_key()
 
 # Turn off the TP
@@ -55,7 +81,7 @@ def tp_off(email_id):
         click(PAGE_ELEMENT["tp_button_done_en"])
     except:
         click(PAGE_ELEMENT["tp_button_done_id"])
-    log.info("Done")
+    # log.info("Done")
 
 # Delete the profile
 def delete_profile(email_id):
@@ -70,6 +96,7 @@ def delete_profile(email_id):
     filling(element=PAGE_ELEMENT["owner_profile_name"], fill="1")
     time.sleep(4)
     enter_key()
+    time.sleep(2)
     open_link(PAGE_URL["url_dp"])
     time.sleep(2)
     clear_field(element=PAGE_ELEMENT["profile1_name"])
@@ -182,132 +209,96 @@ def screenshot_account_information(email_id):
 # Flow of the scripts (Alur Jalannya Script)
 # payment_method_list = []
 # due_date_list = []
-account_list = []
-status_list = []
-state_list = []
 def flow():
     for _, i in CREDENTIAL_DF.iterrows():
         email_id = i["email"]
         password = i["pass"]
 
-        # Setup the result file
-        try:
-            df_result = pd.DataFrame(
-                {
-                    "email" : account_list,
-                    "status" : status_list,
-                    "state" : state_list
-                }
-            )
-
-            df_result.to_csv(
-                f"results/hackback_{args.n}.csv"
-            )
-        except:
-            pass
-        account_list.append(email_id)
+        log.info("-----------------------------------------------------------------------------------------")
+        resume.info(f"-----------------------------------------------------------------------------------------")
         driver_start()
+        # Setup the result file
+        # try:
+        #     df_result = pd.DataFrame(
+        #         {
+        #             "email" : account_list,
+        #             "status" : status_list,
+        #             "state" : state_list
+        #         }
+        #     )
+
+        #     df_result.to_csv(
+        #         f"results/hackback_{args.n}.csv"
+        #     )
+        # except:
+        #     pass
+        # account_list.append(email_id)
         try:
             log.info(f"Start hackback for {email_id}")
             login(email_id, password) # Login to netflix
         except:
             log.error(f"FAILED LOGIN : {email_id}")
-            status = "FAILED"
-            state = "failed login"
-            status_list.append(status)
-            state_list.append(state)
+            resume.error(f"FAILED LOGIN : {email_id}")
+            close_driver()
             continue
         try:
             time.sleep(3)
             tp_off(email_id) # Turn off the TP
         except:
             log.error(f"FAILED to login : {email_id}")
-            status = "FAILED"
-            state = "failed to login"
-            status_list.append(status)
-            state_list.append(state)
+            resume.error(f"FAILED to login : {email_id}")
+            close_driver()
             continue
         try:
             screenshot_account_information(email_id)
         except:
             log.error(f"FAILED screenshot the account information : {email_id}")
-            status = "FAILED"
-            state = "failed screenshot account information"
-            status_list.append(status)
-            state_list.append(state)
+            resume.error(f"FAILED screenshot the account information : {email_id}")
+            close_driver()
             continue
         try:
             time.sleep(3)
             delete_profile(email_id) # Delete the profile
         except:
             log.error(f"FAILED DELETE : {email_id}")
-            status = "FAILED"
-            state = "failed delete profile"
-            status_list.append(status)
-            state_list.append(state)
+            resume.error(f"FAILED DELETE : {email_id}")
+            close_driver()
             continue
         try:
             time.sleep(3)
             remove_pin(email_id, password) # Remove the pin
         except:
             log.error(f"FAILED PIN : {email_id}")
-            status = "FAILED"
-            state = "failed remove pin"
-            status_list.append(status)
-            state_list.append(state)
+            resume.error(f"FAILED PIN : {email_id}")
+            close_driver()
             continue
         try:
             time.sleep(3)
             clean_history(email_id) # Clean the history
         except:
             log.error(f"Has Empty history : {email_id}")
-            status = "Has Empty history"
-            state = "Has Empty history"
-            status_list.append(status)
-            state_list.append(state)
+            resume.info(f"Has Empty history : {email_id}")
+            # close_driver()
             pass
         try:
             time.sleep(3)
             change_password(email_id, password) # Change the password
         except:
             log.error(f"FAILED PASSWORD : {email_id}")
-            status = "FAILED"
-            state = "failed change password"
-            status_list.append(status)
-            state_list.append(state)
+            resume.error(f"FAILED PASSWORD : {email_id}")
+            close_driver()
             continue
         try:
             time.sleep(3)
             clean_cookies(email_id) # Clean the cookies
         except:
             log.error(f"FAILED CLEAN COOKIES : {email_id}")
-            status = "FAILED"
-            state = "failed clean cookies"
-            status_list.append(status)
-            state_list.append(state)
+            resume.error(f"FAILED CLEAN COOKIES : {email_id}")
+            close_driver()
             continue
-        
-        account_list.append(email_id)
-        try:
-            status_list.append(status)
-            state_list.append(state)
-        except:
-            status_list.append("SUCCESS")
-        try:
-            state_list.append(state)
-        except:
-            state_list.append("success")
-        # try:
-        #     payment_method_list.append(payment_method)
-        # except:
-        #     payment_method_list.append("Failed")
-        # try:
-        #     due_date_list.append(due_date)
-        # except:
-        #     due_date_list.append("Failed")
 
         close_driver() # Close the driver
-
         log.info(f"Done hackback for {email_id}")
+        resume.info(f"SUCCESS for {email_id}")
 if __name__ == "__main__":
     flow()

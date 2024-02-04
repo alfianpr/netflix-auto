@@ -13,21 +13,22 @@ from pathlib import Path
 log_level = logging.DEBUG
 
 # Print to the terminal
-logging.root.setLevel(log_level)
-formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(message)s", "%Y-%m-%d %H:%M:%S")
-stream = logging.StreamHandler()
-stream.setLevel(log_level)
-stream.setFormatter(formatter)
-log = logging.getLogger("pythonConfig")
-if not log.hasHandlers():
-    log.setLevel(log_level)
-    log.addHandler(stream)
+# resume = logging.basicConfig(level=logging.INFO, filename="py_log.log",filemode="w",
+#                     format="%(asctime)s %(levelname)s %(message)s")
 
-# file handler:
-file_handler = logging.FileHandler(Path("hackback.log"), mode="a")
-file_handler.setLevel(log_level)
-file_handler.setFormatter(formatter)
-log.addHandler(file_handler)
+
+
+def setup_logger(logger_name, log_file, level=logging.INFO):
+    l = logging.getLogger(logger_name)
+    formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(message)s", "%Y-%m-%d %H:%M:%S")
+    fileHandler = logging.FileHandler(log_file, mode='w')
+    fileHandler.setFormatter(formatter)
+    streamHandler = logging.StreamHandler()
+    streamHandler.setFormatter(formatter)
+
+    l.setLevel(level)
+    l.addHandler(fileHandler)
+    l.addHandler(streamHandler)    
 
 def driver_start():
     '''
