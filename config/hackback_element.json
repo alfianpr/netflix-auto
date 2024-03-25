@@ -1,6 +1,6 @@
 {
-    "email_login" : "/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[1]/form[1]/div[1]/div[1]/input[1]",
-    "password_login" : "/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[1]/form[1]/div[2]/div[1]/div[1]/input[1]",
+    "email_login" : "(//input[@id=':r0:'])[1]",
+    "password_login" : "(//input[@id=':r3:'])[1]",
     "tp_button_off_en" : "(//button[@aria-label='ON'])[1]",
     "tp_button_off_id" : "(//button[@aria-label='HIDUP'])[1]",
     "tp_button_done_en" : "(//button[normalize-space()='Done'])[1]",

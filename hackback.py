@@ -14,11 +14,12 @@ import json
 import argparse
 import pandas as pd
 import time
-from datetime import datetime
+import datetime
 import logging
 from pathlib import Path
 
 log_level = logging.DEBUG
+sekarang = datetime.datetime.now()
 
 # Setup the input
 parser = argparse.ArgumentParser(description="Input the number of hackback credentials")
@@ -58,8 +59,8 @@ NEW_PASS_LISTS = json.load(open(f"credential/hackback_newpass.json"))
 def login(email_id, password):
     # try:
     open_link(PAGE_URL["url_tp"])
-    log.info(f"Login to netflix {PAGE_URL['url_tp']}")
-    time.sleep(3)
+    # log.info(f"Login to netflix {PAGE_URL['url_tp']}")
+    time.sleep(2)
     filling(PAGE_ELEMENT["email_login"], email_id)
     # log.info(f"Input email {email_id}")
     filling(PAGE_ELEMENT["password_login"], password)
@@ -87,18 +88,18 @@ def tp_off(email_id):
 def delete_profile(email_id):
     log.info(f"Delete the profile {email_id}")
     open_link(PAGE_URL["url_dp"])
-    time.sleep(2)
+    time.sleep(1)
     clear_field(element=PAGE_ELEMENT["owner_profile_name"])
     clear_field(element=PAGE_ELEMENT["profile1_name"])
     clear_field(element=PAGE_ELEMENT["profile2_name"])
     clear_field(element=PAGE_ELEMENT["profile3_name"])
     clear_field(element=PAGE_ELEMENT["profile4_name"])
     filling(element=PAGE_ELEMENT["owner_profile_name"], fill="1")
-    time.sleep(4)
+    time.sleep(2)
     enter_key()
-    time.sleep(2)
+    time.sleep(1)
     open_link(PAGE_URL["url_dp"])
-    time.sleep(2)
+    time.sleep(1)
     clear_field(element=PAGE_ELEMENT["profile1_name"])
     clear_field(element=PAGE_ELEMENT["profile2_name"])
     clear_field(element=PAGE_ELEMENT["profile3_name"])
@@ -107,14 +108,14 @@ def delete_profile(email_id):
     filling(element=PAGE_ELEMENT["profile2_name"], fill="3")
     filling(element=PAGE_ELEMENT["profile3_name"], fill="4")
     filling(element=PAGE_ELEMENT["profile4_name"], fill="5")
-    time.sleep(4)
+    time.sleep(1)
     enter_key()
 
 # Remove the pin
 def remove_pin(email_id, password):
     log.info("Remove the pin")
     open_link(PAGE_URL["url_rp"])
-    time.sleep(3)
+    time.sleep(2)
     log.info(f"{email_id} : parental password")
     filling(
         element=PAGE_ELEMENT["form_parental_control"], 
@@ -135,16 +136,16 @@ def remove_pin(email_id, password):
 
 # Clean the history
 def clean_history(email_id):
-    log.info("Hide the history")
+    # log.info("Hide the history")
     open_link(PAGE_URL["url_ch"])
-    time.sleep(3)
+    time.sleep(2)
     # try:
     try:
         click(PAGE_ELEMENT["hide_all_history_button_en"])
     except:
         click(PAGE_ELEMENT["hide_all_history_button_id"])
     log.info(f"Hidden the history for {email_id}")
-    time.sleep(2)
+    time.sleep(1)
     try:
         click(PAGE_ELEMENT["confirm_delete_history_en"])
     except:
@@ -157,7 +158,7 @@ def change_password(email_id, password):
     log.info(f"Change the password for {email_id}")
     log.info(f"New password : {new_password}")
     open_link(PAGE_URL["url_cp"])
-    time.sleep(10)
+    time.sleep(2)
     filling(
         element=PAGE_ELEMENT["cp_current_password"], 
         fill=password
@@ -242,20 +243,23 @@ def flow():
             close_driver()
             continue
         try:
-            time.sleep(3)
+            time.sleep(2)
             tp_off(email_id) # Turn off the TP
+            time.sleep(1)
+            # screenshot('test')
         except:
             log.error(f"FAILED to login : {email_id}")
             resume.error(f"FAILED to login : {email_id}")
             close_driver()
             continue
-        try:
-            screenshot_account_information(email_id)
-        except:
-            log.error(f"FAILED screenshot the account information : {email_id}")
-            resume.error(f"FAILED screenshot the account information : {email_id}")
-            close_driver()
-            continue
+        screenshot(f"hackback_{args.n}_{email_id}_{sekarang}")
+        # try:
+        #     screenshot_account_information(email_id)
+        # except:
+        #     log.error(f"FAILED screenshot the account information : {email_id}")
+        #     resume.error(f"FAILED screenshot the account information : {email_id}")
+        #     close_driver()
+        #     continue
         try:
             time.sleep(3)
             delete_profile(email_id) # Delete the profile
