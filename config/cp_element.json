@@ -1,0 +1,12 @@
+{
+    "dasar_span": "//*[@id='appMountPoint']/div/div/div/div[2]/div/div/div[1]/label[1]/h2/span",
+    "dasar": "//*[@id='appMountPoint']/div/div/div/div[2]/div/div/div[1]/label[1]/h2",
+    "standar": "//*[@id='appMountPoint']/div/div/div[2]/div/div/ul/li[2]",
+    "premium": "//*[@id='appMountPoint']/div/div/div[2]/div/div/div[2]/label[4]/h2",
+    "filling_email_1": "",
+    "filling_password_1": "",
+    "filling_email_2": "",
+    "filling_password_2": "",
+    "sign_in_1":"/html/body/div[1]/div/div[3]/div/div/div[1]/form/button",
+    "sign_in_2": "//*[@id='appMountPoint']/div/div/div[2]/div/form/button"
+}
