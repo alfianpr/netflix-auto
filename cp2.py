@@ -1,9 +1,12 @@
 from netlib.cplib import *
 import json
 import time
+import pandas as pd
 
 t1 = time.time()
 log_file = open('downgrade_log.txt', 'a')
+
+df = pd.read_csv('https://docs.google.com/spreadsheets/d/e/2PACX-1vTQ2w3lo__BTgmboUSYSDjVgy5dopC-2vgHbvojbUNbxXe8I0qbCHGeGSzsJOeugSGO-1wm-rv3mlsd/pub?gid=0&single=true&output=csv')
 
 def Upgrade(email_id, password):
     Output = '{} : Successful !'.format(email_id)
@@ -91,6 +94,37 @@ def Upgrade(email_id, password):
 
     return Output
 
-if __name__ == "__main__":
+def flow():
     driver_start()
-    Upgrade(email_id = "alfianpratama@hotmail.com", password = "NomerSatu_1")
+    dict = df.to_dict("records")
+    log_file = open('downgrade_log.txt', 'a')
+    logging('           Switch - Plan Job Logs            ')
+
+    logging('--------------------------------------------')
+
+    logging('///////////////// JOB START ////////////////')
+    for i in dict:
+        email = i["email"]
+        password = i["password"]
+
+        log_file = open('downgrade_log.txt', 'a')
+
+        try:
+            Output = Upgrade(email, password)
+        except:    
+            Output = '{} : DENIED'.format(email)
+
+        Upgrade(
+            email_id=email,
+            password=password
+        )
+        logging(Output)
+        log_file.close()
+
+    t2 = time.time()
+
+    print("Running Time = ", t2-t1)
+    close_driver()
+
+if __name__ == "__main__":
+    flow()

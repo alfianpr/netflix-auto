@@ -59,6 +59,7 @@ def ScrollDown(value = 1) :
 
 def logging(text):
     print(text)
+    log_file = open('downgrade_log.txt', 'a')
     log_file.write(text)
     log_file.write('\n')
 
