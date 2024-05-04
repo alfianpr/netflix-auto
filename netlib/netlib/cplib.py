@@ -6,29 +6,36 @@ from selenium.webdriver.common.keys import Keys
 from sys import platform
 from selenium.webdriver import ActionChains
 
-op = webdriver.ChromeOptions()
-# prefs = {'download.default_directory': "directory"}
-# op.add_experimental_option('prefs', prefs)
-op.add_experimental_option('excludeSwitches', ['enable-logging'])
-op.add_argument('--ignore-ssl-errors=yes')
-op.add_argument('--ignore-certificate-errors')
-# op.add_argument("--window-size=1920,1080")
-# op.add_argument("--start-maximized")
-op.add_argument('--no-sandbox')
-op.add_argument("--disable-notifications")
-# op.add_argument("--headless=new")
-# ser = Service(ChromeDriverManager().install())
-if platform == "linux" or platform == "darwin":
-    ser = Service(r'./webdriver/chromedriver')
-elif platform == "win32":
-    ser = Service(r'./webdriver/chromedriver.exe')
-driver = webdriver.Chrome(
-    service = ser, 
-    options = op
-)
-action = ActionChains(driver)
+def driver_start():
+
+    global driver, action
+
+    op = webdriver.ChromeOptions()
+    # prefs = {'download.default_directory': "directory"}
+    # op.add_experimental_option('prefs', prefs)
+    op.add_experimental_option('excludeSwitches', ['enable-logging'])
+    op.add_argument('--ignore-ssl-errors=yes')
+    op.add_argument('--ignore-certificate-errors')
+    # op.add_argument("--window-size=1920,1080")
+    # op.add_argument("--start-maximized")
+    op.add_argument('--no-sandbox')
+    op.add_argument("--disable-notifications")
+    # op.add_argument("--headless=new")
+    # ser = Service(ChromeDriverManager().install())
+    if platform == "linux" or platform == "darwin":
+        ser = Service(r'./webdriver/chromedriver')
+    elif platform == "win32":
+        ser = Service(r'./webdriver/chromedriver.exe')
+    driver = webdriver.Chrome(
+        service = ser, 
+        options = op
+    )
+    action = ActionChains(driver)
 
 #/////////////////////// FUNCTION /////////////////////////////
+def open_link(link):
+    driver.get(link)
+
 def Click(element):
     driver.find_element(by = 'xpath', value = element).click()
 
@@ -54,6 +61,10 @@ def logging(text):
     print(text)
     log_file.write(text)
     log_file.write('\n')
-def ClearCookies():
-    driver.get(url_cc)
-    time.sleep(3)
+
+# def ClearCookies():
+#     driver.get(url_cc)
+#     time.sleep(3)
+
+def close_driver():
+    driver.close()
